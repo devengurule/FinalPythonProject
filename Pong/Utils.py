@@ -1,6 +1,3 @@
-
-
-
 class Ball:
     def __init__(self, realX: float, realY: float, speed: float, sprite = 'O'):
         self.realX = realX
@@ -13,7 +10,16 @@ class Ball:
     
     def roundedY(self):
         return round(self.realY)
-    
+
+class Paddle:
+    def __init__(self, realY: float, height: int, sprite = '|'):
+        self.realY = realY
+        self.height = height
+        self.sprite = sprite
+
+    def roundedY(self):
+        return round(self.realY)
+
 class Vector2:
     def __init__(self, x=0, y=0):
         self.x = x
