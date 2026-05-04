@@ -76,8 +76,6 @@ def CalculatePaddlePositions():
     currentPaddlePos.x = paddle1.roundedY()
     currentPaddlePos.y = paddle2.roundedY()
 
-
-
 def DrawPaddles(win: curses.window):
     # Paddle 1
     for i in range(paddle1.height):
