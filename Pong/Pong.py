@@ -9,11 +9,12 @@ def ResetBall():
     ball.realX = ballPosi.x
     ball.realY = ballPosi.y
 
-    direction.x = random.randint(-3, 3)
+    direction.zero()
+
     while(direction.x == 0):
         direction.x = random.randint(-3, 3)
-    direction.y = random.randint(-3, 3)
-    while(direction.y == direction.x or direction.y == -direction.x):
+
+    while(direction.y == direction.x or direction.y == -direction.x or direction.y == 0):
         direction.y = random.randint(-3, 3)
 
 def CheckPaddleWallCollision():
@@ -95,22 +96,24 @@ def CalculateBallPos():
     currentBallPos.y = ball.roundedY()
 
 def CheckWallCollision():
-
     # Collision check with paddle 1
     if currentBallPos.x == paddle1Posi.x:
         if currentBallPos.y == currentPaddlePos.x or currentBallPos.y - currentPaddlePos.x <= paddle1.height and currentBallPos.y - currentPaddlePos.x > 0:
             direction.x *= -1
 
+
     # Collision check with paddle 2
-    if currentBallPos.x == paddle2Posi.x:
+    if currentBallPos.x + 1 == paddle2Posi.x:
         if currentBallPos.y == currentPaddlePos.y or currentBallPos.y - currentPaddlePos.y <= paddle2.height and currentBallPos.y - currentPaddlePos.y > 0:
             direction.x *= -1
 
 
     if currentBallPos.x + len(ball.sprite) - 1 >= w - 1:
         ResetBall()
+        points.x += 1
     elif currentBallPos.x <= 0:
         ResetBall()
+        points.y += 1
 
     elif currentBallPos.y >= h - 1 or currentBallPos.y <= 0:
         # hitting/exiting bottom or top of screen
@@ -122,6 +125,9 @@ def CheckWallCollision():
 def DrawBall(win: curses.window):
     win.addstr(currentBallPos.y, currentBallPos.x, ball.sprite)
 
+def DrawPoints(win: curses.window):
+    win.addstr(2, 35, f'Player 1) {points.x}   Player 2) {points.y}')
+
 def FixedUpdate(win: curses.window):
     CalculatePaddlePositions()
     DrawPaddles(win)
@@ -129,6 +135,8 @@ def FixedUpdate(win: curses.window):
     CalculateBallPos()
     CheckWallCollision()
     DrawBall(win)
+
+    DrawPoints(win)
 
     time.sleep(timeStep)
 
@@ -182,6 +190,8 @@ paddle2Posi = Vector2(90, 2)
 currentBallPos = Vector2()
 currentPaddlePos = Vector2(0, 0)
 
+# x = p1, y = p2
+points = Vector2()
 
 # ball object
 ball = Ball(ballPosi.x, ballPosi.y, 10, '()')
